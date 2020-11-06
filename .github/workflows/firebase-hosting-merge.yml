@@ -11,12 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to firebase
+        id: firebase-deploy
+        uses: mohammed-atif/firebase-publish-react@v1.0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SUPERCHAT_PN }}'
-          channelId: live
-          projectId: superchat-pn
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
+          firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Verify Output
+        run: echo ${{ steps.firebase-deploy.outputs.hosting-url }}
